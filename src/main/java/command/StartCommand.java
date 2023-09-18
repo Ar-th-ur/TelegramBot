@@ -1,11 +1,15 @@
 package command;
 
-import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import callback.*;
+import callback.store.StoreCallBack;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import service.SendBotService;
 
 import java.io.File;
+import java.util.List;
 
 public class StartCommand implements Command {
     public final static String NAME = "/start";
@@ -19,21 +23,24 @@ public class StartCommand implements Command {
     @Override
     public void execute(Update update) {
         File file = new File("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\menu.png");
-        long id = update.message().chat().id();
+        InputFile inputFile = new InputFile(file);
+        Long chatId = update.getMessage().getChatId();
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Магазин \uD83C\uDFAE").callbackData("store"),
-                        new InlineKeyboardButton("Кабинет \uD83E\uDEAA").callbackData("account")
-                },
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("FAQ ⁉\uFE0F").callbackData("faq"),
-                        new InlineKeyboardButton("Гарантии ☑\uFE0F").callbackData("guarantee")
-                },
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Отзывы \uD83D\uDDE3").callbackData("reviews"),
-                        new InlineKeyboardButton("Поддержка \uD83D\uDC68\u200D\uD83D\uDCBB").callbackData("support")
-                }
+                List.of(
+                        List.of(
+                                InlineKeyboardButton.builder().text("Магазин \uD83C\uDFAE").callbackData(StoreCallBack.NAME).build(),
+                                InlineKeyboardButton.builder().text("Кабинет \uD83E\uDEAA").callbackData(AccountCallback.NAME).build()
+                        ),
+                        List.of(
+                                InlineKeyboardButton.builder().text("FAQ ⁉\uFE0F").callbackData(FAQCallback.NAME).build(),
+                                InlineKeyboardButton.builder().text("Гарантии ☑\uFE0F").callbackData(GuaranteeCallback.NAME).build()
+                        ),
+                        List.of(
+                                InlineKeyboardButton.builder().text("Отзывы \uD83D\uDDE3").callbackData(ReviewCallback.NAME).build(),
+                                InlineKeyboardButton.builder().text("Поддержка \uD83D\uDC68\u200D\uD83D\uDCBB").callbackData(SupportCallback.NAME).build()
+                        )
+                )
         );
-        service.sendPhoto(id, file, markup, START_MESSAGE);
+        service.sendPhoto(chatId, inputFile, markup, START_MESSAGE);
     }
 }

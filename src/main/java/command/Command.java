@@ -1,6 +1,6 @@
 package command;
 
-import com.pengrad.telegrambot.model.Update;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
  * Command interface for handling telegram-bot commands.

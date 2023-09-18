@@ -2,14 +2,17 @@ package callback.store.fortnite;
 
 import callback.BackToMainCallback;
 import callback.Callback;
+import callback.VbacksCallback;
 import callback.store.StoreCallBack;
-import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.model.request.InputMediaPhoto;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import service.SendBotService;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 public class FortnitStoreCallBack implements Callback {
     public static final String NAME = "fortnite";
@@ -21,23 +24,29 @@ public class FortnitStoreCallBack implements Callback {
 
     @Override
     public void execute(CallbackQuery callbackQuery) {
-        Long id = callbackQuery.message().chat().id();
-        Integer messageId = callbackQuery.message().messageId();
-        InputMediaPhoto media = new InputMediaPhoto(new File("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\fortnite.png"));
-        media.caption("Выбери категорию");
+        Long id = callbackQuery.getMessage().getChatId();
+        Integer messageId = callbackQuery.getMessage().getMessageId();
+        InputMediaPhoto media = new InputMediaPhoto();
+        try {
+            media.setMedia(new FileInputStream("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\fortnite.png"), "fortnite.png");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }media.setCaption("Выбери категорию");
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Вбаксы").callbackData(VbacksCallback.NAME),
-                        new InlineKeyboardButton("Наборы").callbackData(StoreSetsCallback.NAME)
-                },
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Подписка").callbackData("3")
-                },
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Назад").callbackData(StoreCallBack.NAME),
-                        new InlineKeyboardButton("Главное меню").callbackData(BackToMainCallback.NAME)
-                }
+                List.of(
+                        List.of(
+                                InlineKeyboardButton.builder().text("Вбаксы").callbackData(VbacksCallback.NAME).build(),
+                                InlineKeyboardButton.builder().text("Наборы").callbackData("1").build()
+                        ),
+                        List.of(
+                                InlineKeyboardButton.builder().text("Подписка").callbackData("12").build()
+                        ),
+                        List.of(
+                                InlineKeyboardButton.builder().text("Назад").callbackData(StoreCallBack.NAME).build(),
+                                InlineKeyboardButton.builder().text("Гглавное меню").callbackData(BackToMainCallback.NAME).build()
+                        )
+                )
         );
-        service.sendEditMessage(id, messageId, media, markup);
+        service.sendEditPhoto(id, messageId, media, markup);
     }
 }

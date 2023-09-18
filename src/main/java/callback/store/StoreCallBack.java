@@ -3,13 +3,15 @@ package callback.store;
 import callback.BackToMainCallback;
 import callback.Callback;
 import callback.store.fortnite.FortnitStoreCallBack;
-import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.model.request.InputMediaPhoto;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import service.SendBotService;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 public class StoreCallBack implements Callback {
     public final static String NAME = "store";
@@ -22,18 +24,25 @@ public class StoreCallBack implements Callback {
 
     @Override
     public void execute(CallbackQuery callbackQuery) {
-        Long id = callbackQuery.message().chat().id();
-        Integer messageId = callbackQuery.message().messageId();
-        InputMediaPhoto media = new InputMediaPhoto(new File("C:\\Users\\user\\IdeaProjects\\Solution\\src\\main\\resources\\store.png"));
-        media.caption(STORE_MESSAGE);
+        Long id = callbackQuery.getMessage().getChatId();
+        Integer messageId = callbackQuery.getMessage().getMessageId();
+        InputMediaPhoto media = new InputMediaPhoto();
+        try {
+            media.setMedia(new FileInputStream("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\store.png"), "store.png");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        media.setCaption(STORE_MESSAGE);
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Fortnite").callbackData(FortnitStoreCallBack.NAME),
-                },
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Назад").callbackData(BackToMainCallback.NAME)
-                }
+                List.of(
+                        List.of(
+                                InlineKeyboardButton.builder().text("Fortnite").callbackData(FortnitStoreCallBack.NAME).build()
+                        ),
+                        List.of(
+                                InlineKeyboardButton.builder().text("Назад").callbackData(BackToMainCallback.NAME).build()
+                        )
+                )
         );
-        service.sendEditMessage(id, messageId, media, markup);
+        service.sendEditPhoto(id, messageId, media, markup);
     }
 }

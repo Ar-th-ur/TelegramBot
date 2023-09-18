@@ -1,6 +1,6 @@
 package callback;
 
-import com.pengrad.telegrambot.model.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import service.SendBotService;
 
 public class SupportCallback implements Callback {
@@ -13,6 +13,8 @@ public class SupportCallback implements Callback {
 
     @Override
     public void execute(CallbackQuery callbackQuery) {
+        Long chatId = callbackQuery.getMessage().getChatId();
+        Integer messageId = callbackQuery.getMessage().getMessageId();
 
     }
 }
