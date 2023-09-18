@@ -1,34 +1,19 @@
 package callback;
 
-import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.model.request.InputMediaPhoto;
+import callback.store.StoreCallBack;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import service.SendBotService;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 public class BackToMainCallback implements Callback {
     public final static String NAME = "backToMain";
-    public static InlineKeyboardMarkup markup;
     private final SendBotService service;
-
-    static {
-        markup = new InlineKeyboardMarkup(
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Магазин \uD83C\uDFAE").callbackData("store"),
-                        new InlineKeyboardButton("Кабинет \uD83E\uDEAA").callbackData("account")
-                },
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("FAQ ⁉\uFE0F").callbackData("faq"),
-                        new InlineKeyboardButton("Гарантии ☑\uFE0F").callbackData("guarantee")
-                },
-                new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Отзывы \uD83D\uDDE3").callbackData("reviews"),
-                        new InlineKeyboardButton("Поддержка \uD83D\uDC68\u200D\uD83D\uDCBB").callbackData("support")
-                }
-        );
-    }
 
     public BackToMainCallback(SendBotService service) {
         this.service = service;
@@ -36,10 +21,30 @@ public class BackToMainCallback implements Callback {
 
     @Override
     public void execute(CallbackQuery callbackQuery) {
-        Long id = callbackQuery.message().chat().id();
-        Integer messageId = callbackQuery.message().messageId();
-        InputMediaPhoto media = new InputMediaPhoto(new File("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\menu.png"));
-        media.caption("Главное меню");
-        service.sendEditMessage(id, messageId, media, markup);
+        InputMediaPhoto media = new InputMediaPhoto();
+        try {
+            media.setMedia(new FileInputStream("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\menu.png"), "menu.png");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }media.setCaption("Главное меню");
+        Integer messageId = callbackQuery.getMessage().getMessageId();
+        Long chatId = callbackQuery.getMessage().getChatId();
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
+                List.of(
+                        List.of(
+                                InlineKeyboardButton.builder().text("Магазин \uD83C\uDFAE").callbackData(StoreCallBack.NAME).build(),
+                                InlineKeyboardButton.builder().text("Кабинет \uD83E\uDEAA").callbackData(AccountCallback.NAME).build()
+                        ),
+                        List.of(
+                                InlineKeyboardButton.builder().text("FAQ ⁉\uFE0F").callbackData(FAQCallback.NAME).build(),
+                                InlineKeyboardButton.builder().text("Гарантии ☑\uFE0F").callbackData(GuaranteeCallback.NAME).build()
+                        ),
+                        List.of(
+                                InlineKeyboardButton.builder().text("Отзывы \uD83D\uDDE3").callbackData(ReviewCallback.NAME).build(),
+                                InlineKeyboardButton.builder().text("Поддержка \uD83D\uDC68\u200D\uD83D\uDCBB").callbackData(SupportCallback.NAME).build()
+                        )
+                )
+        );
+        service.sendEditPhoto(chatId, messageId, media, markup);
     }
 }

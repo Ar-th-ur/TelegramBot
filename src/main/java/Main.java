@@ -1,8 +1,16 @@
 import bot.Bot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Main {
     public static void main(String[] args) {
-        Bot bot = new Bot("6607346311:AAHJuchh7n7hU7vjsO4MS2VXPKM4Rubq-rA");
-        bot.init();
+        Bot bot = new Bot("6607346311:AAE_X_v9vZRe9tNKRtEdlAoDNemwLLltfZ8");
+        try {
+            TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
+            api.registerBot(bot);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

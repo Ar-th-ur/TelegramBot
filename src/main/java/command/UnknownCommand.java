@@ -1,6 +1,6 @@
 package command;
 
-import com.pengrad.telegrambot.model.Update;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import service.SendBotService;
 
 public class UnknownCommand implements Command {
@@ -13,6 +13,6 @@ public class UnknownCommand implements Command {
 
     @Override
     public void execute(Update update) {
-        service.sendMessage(update.message().chat().id(), UNKNOWN_MESSAGE);
+        service.sendMessage(update.getMessage().getChatId(), UNKNOWN_MESSAGE);
     }
 }

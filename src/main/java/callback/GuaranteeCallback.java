@@ -1,6 +1,6 @@
 package callback;
 
-import com.pengrad.telegrambot.model.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import service.SendBotService;
 
 public class GuaranteeCallback implements Callback {

@@ -1,6 +1,6 @@
 package callback;
 
-import com.pengrad.telegrambot.model.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 public interface Callback {
     void execute(CallbackQuery callbackQuery);

@@ -1,14 +1,13 @@
 package bot;
 
 import callback.CallbackContainer;
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.UpdatesListener;
-import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.Update;
 import command.CommandContainer;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import service.SendBotServiceImp;
 
-public class Bot extends TelegramBot {
+public class Bot extends TelegramLongPollingBot {
     private static final String COMMAND_PREFIX = "/";
     private final CommandContainer commandContainer;
     private final CallbackContainer callbackContainer;
@@ -19,26 +18,24 @@ public class Bot extends TelegramBot {
         this.callbackContainer = new CallbackContainer(new SendBotServiceImp(this));
     }
 
-    public void init() {
-        this.setUpdatesListener(list -> {
-            list.forEach(Bot.this::processUpdate);
-            return UpdatesListener.CONFIRMED_UPDATES_ALL;
-        });
-    }
-
-
-    public void processUpdate(Update update) {
-        if (update.message() != null && update.message().text() != null) {
-            String text = update.message().text();
+    @Override
+    public void onUpdateReceived(Update update) {
+        if (update.getMessage() != null && update.getMessage().getText() != null) {
+            String text = update.getMessage().getText();
             if (text.startsWith(COMMAND_PREFIX)) {
                 String commandIdentifier = text.split(" ")[0];
                 commandContainer.retrieveCommand(commandIdentifier).execute(update);
             }
         }
-        if (update.callbackQuery() != null) {
-            CallbackQuery callbackQuery = update.callbackQuery();
-            String callbackIdentifier = callbackQuery.data();
+        if (update.getCallbackQuery() != null) {
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            String callbackIdentifier = callbackQuery.getData();
             callbackContainer.retrieveCallback(callbackIdentifier).execute(callbackQuery);
         }
+    }
+
+    @Override
+    public String getBotUsername() {
+        return "@igrovnybot";
     }
 }
