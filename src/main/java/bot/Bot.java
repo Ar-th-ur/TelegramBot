@@ -4,6 +4,7 @@ import callback.CallbackContainer;
 import command.CommandContainer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerPreCheckoutQuery;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.payments.PreCheckoutQuery;
@@ -45,6 +46,17 @@ public class Bot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
 
             }
+//            SendMessage sendMessage = new SendMessage();
+//            sendMessage.setChatId("1066061901");
+//            sendMessage.setText("""
+//                    Заказ оплачен: @%s
+//                    Цена:
+//                    Товар:
+//                    %s
+//                    """.formatted(
+//                    preCheckoutQuery.getFrom().getUserName(),
+//
+//                    ));
         }
     }
 

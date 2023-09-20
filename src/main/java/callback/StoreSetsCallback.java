@@ -5,8 +5,8 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import service.SendBotService;
-import sets.Set;
-import sets.SetsContainer;
+import sets.Product;
+import sets.ProductsContainer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,10 +42,10 @@ public class StoreSetsCallback implements Callback {
 
     private void sendProduct(CallbackQuery callbackQuery) {
         String name = callbackQuery.getData().split(" ", 2)[1];
-        Set set = SetsContainer.getSet(name);
+        Product setProduct = ProductsContainer.getSet(name);
         Long chatId = callbackQuery.getMessage().getChatId();
         Integer messageId = callbackQuery.getMessage().getMessageId();
-        String paymentLink = service.getInvoiceLink(chatId, set.getName(), set.getPrice());
+        String paymentLink = service.getInvoiceLink(chatId, setProduct.getName(), setProduct.getPrice());
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
                 List.of(
                         List.of(
@@ -56,7 +56,7 @@ public class StoreSetsCallback implements Callback {
                         )
                 )
         );
-        InputMediaPhoto media = set.getPhoto();
+        InputMediaPhoto media = setProduct.getPhoto();
         service.sendEditPhoto(chatId, messageId, media, markup);
     }
 
@@ -67,8 +67,8 @@ public class StoreSetsCallback implements Callback {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         List<InlineKeyboardButton> row = new ArrayList<>();
         int counter = 0;
-        for (Set set : SetsContainer.getSets().values()) {
-            row.add(createButtonData(set.getName(), NAME + " " + set.getName()));
+        for (Product product : ProductsContainer.getSets().values()) {
+            row.add(createButtonData(product.getName(), NAME + " " + product.getName()));
             counter++;
             if (counter == 2) {
                 keyboard.add(List.copyOf(row));
