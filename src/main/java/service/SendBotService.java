@@ -11,5 +11,5 @@ public interface SendBotService {
 
     void sendEditPhoto(Long chatId, Integer messageId, InputMediaPhoto media, InlineKeyboardMarkup markup);
 
-    void sendEditMessage(Long chatId, Integer messageId, String text, InlineKeyboardMarkup markup);
+    String getInvoiceLink(Long chatId, String title, int price);
 }

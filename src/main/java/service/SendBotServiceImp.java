@@ -1,12 +1,14 @@
 package service;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.methods.invoices.CreateInvoiceLink;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
+import org.telegram.telegrambots.meta.api.objects.payments.LabeledPrice;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -45,6 +47,7 @@ public class SendBotServiceImp implements SendBotService {
         messageMedia.setChatId(chatId);
         messageMedia.setMessageId(messageId);
         messageMedia.setReplyMarkup(markup);
+        media.setParseMode(ParseMode.MARKDOWN);
         try {
             executor.execute(messageMedia);
         } catch (TelegramApiException e) {
@@ -53,16 +56,20 @@ public class SendBotServiceImp implements SendBotService {
     }
 
     @Override
-    public void sendEditMessage(Long chatId, Integer messageId, String text, InlineKeyboardMarkup markup) {
-        EditMessageCaption editMessageText = new EditMessageCaption();
-        editMessageText.setCaption(text);
-        editMessageText.setChatId(chatId);
-        editMessageText.setMessageId(messageId);
-        editMessageText.setReplyMarkup(markup);
+    public String getInvoiceLink(Long chatId, String title, int price) {
+        CreateInvoiceLink sendInvoice = CreateInvoiceLink.builder()
+                .currency("RUB")
+                .providerToken("410694247:TEST:8fbddfa7-6c7f-43f2-8ed1-63af9094d320")
+                .title("Набор «" + title + "»")
+                .description("Товар для игры Fornite на ваш аккаунт")
+                .payload("payload")
+                .price(new LabeledPrice("Цена", price))
+                .build();
         try {
-            executor.execute(editMessageText);
+            return executor.execute(sendInvoice);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+        return "";
     }
 }

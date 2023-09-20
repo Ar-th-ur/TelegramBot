@@ -6,8 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import service.SendBotService;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.util.List;
 
 public class ReviewCallback implements Callback {
@@ -23,11 +22,7 @@ public class ReviewCallback implements Callback {
         Long id = callbackQuery.getMessage().getChatId();
         Integer messageId = callbackQuery.getMessage().getMessageId();
         InputMediaPhoto media = new InputMediaPhoto();
-        try {
-            media.setMedia(new FileInputStream("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\review.png"), "review.png");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        media.setMedia(new File("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\review.png"), "review.png");
         media.setCaption("Чат с отзывами");
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
                 List.of(

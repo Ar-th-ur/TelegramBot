@@ -1,14 +1,12 @@
 package callback;
 
-import callback.store.StoreCallBack;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import service.SendBotService;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.util.List;
 
 public class BackToMainCallback implements Callback {
@@ -21,18 +19,15 @@ public class BackToMainCallback implements Callback {
 
     @Override
     public void execute(CallbackQuery callbackQuery) {
-        InputMediaPhoto media = new InputMediaPhoto();
-        try {
-            media.setMedia(new FileInputStream("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\menu.png"), "menu.png");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }media.setCaption("Главное меню");
         Integer messageId = callbackQuery.getMessage().getMessageId();
         Long chatId = callbackQuery.getMessage().getChatId();
+        InputMediaPhoto media = new InputMediaPhoto();
+        media.setMedia(new File("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\menu.png"), "menu.png");
+        media.setCaption("Главное меню");
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
                 List.of(
                         List.of(
-                                InlineKeyboardButton.builder().text("Магазин \uD83C\uDFAE").callbackData(StoreCallBack.NAME).build(),
+                                InlineKeyboardButton.builder().text("Магазин \uD83C\uDFAE").callbackData(FortnitStoreCallBack.NAME).build(),
                                 InlineKeyboardButton.builder().text("Кабинет \uD83E\uDEAA").callbackData(AccountCallback.NAME).build()
                         ),
                         List.of(

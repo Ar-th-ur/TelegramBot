@@ -1,7 +1,6 @@
 package command;
 
 import callback.*;
-import callback.store.StoreCallBack;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -28,7 +27,7 @@ public class StartCommand implements Command {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
                 List.of(
                         List.of(
-                                InlineKeyboardButton.builder().text("Магазин \uD83C\uDFAE").callbackData(StoreCallBack.NAME).build(),
+                                InlineKeyboardButton.builder().text("Магазин \uD83C\uDFAE").callbackData(FortnitStoreCallBack.NAME).build(),
                                 InlineKeyboardButton.builder().text("Кабинет \uD83E\uDEAA").callbackData(AccountCallback.NAME).build()
                         ),
                         List.of(
