@@ -1,7 +1,16 @@
 package callback;
 
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import service.SendBotService;
+import utils.ButtonUtils;
+
+import java.io.File;
+import java.util.List;
+
+import static utils.ButtonUtils.createButtonData;
 
 public class FAQCallback implements Callback {
     public final static String NAME = "faq";
@@ -13,6 +22,19 @@ public class FAQCallback implements Callback {
 
     @Override
     public void execute(CallbackQuery callbackQuery) {
-
+        Long chatId = callbackQuery.getMessage().getChatId();
+        Integer messageId = callbackQuery.getMessage().getMessageId();
+        InputMediaPhoto media = new InputMediaPhoto();
+        media.setMedia(new File("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\faq.png"), "faq.png");
+        media.setParseMode(ParseMode.MARKDOWN);
+        media.setCaption("Ответы на [Часто задаваемые вопросы](https://telegra.ph/FAQ-CHasto-zadavaemye-voprosy-09-21-2)");
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
+                List.of(
+                        List.of(
+                                createButtonData("Назад", BackToMainCallback.NAME)
+                        )
+                )
+        );
+        service.sendEditPhoto(chatId, messageId, media, markup);
     }
 }

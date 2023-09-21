@@ -10,14 +10,16 @@ public class CallbackContainer {
     private final Map<String, Callback> callbackMap;
 
     public CallbackContainer(SendBotServiceImp service) {
-        callbackMap = Collections.unmodifiableMap(new HashMap<>(){{
+        callbackMap = Collections.unmodifiableMap(new HashMap<>() {{
             put(AccountCallback.NAME, new AccountCallback(service));
-            put(FAQCallback.NAME, new FAQCallback(service));
             put(GuaranteeCallback.NAME, new GuaranteeCallback(service));
             put(ReviewCallback.NAME, new ReviewCallback(service));
+            put(PurchasesHistoryCallback.NAME, new PurchasesHistoryCallback(service));
+            put(SubscribesCallback.NAME, new SubscribesCallback(service));
             put(SupportCallback.NAME, new SupportCallback(service));
             put(BackToMainCallback.NAME, new BackToMainCallback(service));
             put(FortnitStoreCallBack.NAME, new FortnitStoreCallBack(service));
+            put(FAQCallback.NAME, new FAQCallback(service));
             put(StoreSetsCallback.NAME, new StoreSetsCallback(service));
             put(VbacksCallback.NAME, new VbacksCallback(service));
             put(StartDialogCallback.NAME, new StartDialogCallback(service));

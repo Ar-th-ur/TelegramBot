@@ -4,6 +4,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import service.SendBotService;
+import users.Purchases;
 
 import java.io.File;
 import java.util.List;
@@ -24,23 +25,15 @@ public class AccountCallback implements Callback {
         Integer messageId = callbackQuery.getMessage().getMessageId();
         InputMediaPhoto media = new InputMediaPhoto();
         media.setMedia(new File("C:\\Users\\user\\IdeaProjects\\comunity_edition\\RobertTelegramBot\\src\\main\\resources\\account.png"), "account.png");
+        Long userId = callbackQuery.getFrom().getId();
         media.setCaption("""
                 Ваш ID профиля: `%d`
-                Количество пополнений: 0
-                Количество заказов: 0
-                                
-                Баланс: 0₽
-                """.formatted(callbackQuery.getFrom().getId()));
+                Количество заказов: %d
+                """.formatted(userId, Purchases.getCount(id)));
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
                 List.of(
                         List.of(
-                                createButtonData("Пополнить баланс \uD83D\uDCB0", "12")
-                        ),
-                        List.of(
-                                createButtonData("Использовать промокод \uD83D\uDECD", "12")
-                        ),
-                        List.of(
-                                createButtonData("История покупок \uD83D\uDD0E", "12")
+                                createButtonData("История покупок \uD83D\uDD0E", PurchasesHistoryCallback.NAME)
                         ),
                         List.of(
                                 createButtonData("Назад", BackToMainCallback.NAME)

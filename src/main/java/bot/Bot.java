@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import service.SendBotServiceImp;
 import sets.Product;
 import sets.ProductsContainer;
+import users.Purchases;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -76,8 +77,11 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void sendRemindUser(PreCheckoutQuery preCheckoutQuery) {
+        Long userId = preCheckoutQuery.getFrom().getId();
+        String productName = ProductsContainer.getCommonMap().get(preCheckoutQuery.getInvoicePayload()).getName();
+        Purchases.addPurchase(userId, productName);
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(preCheckoutQuery.getFrom().getId());
+        sendMessage.setChatId(userId);
         sendMessage.setText("""
                 ✅ Заказ успешно оплачен
                                             

@@ -38,7 +38,7 @@ public class FortnitStoreCallBack implements Callback {
                                 createButtonData("Вбаксы", VbacksCallback.NAME)
                         ),
                         List.of(
-                                createButtonData("Подписки", "12")
+                                createButtonData("Подписки", SubscribesCallback.NAME)
                         ),
                         List.of(
                                 createButtonData("Назад", BackToMainCallback.NAME)
