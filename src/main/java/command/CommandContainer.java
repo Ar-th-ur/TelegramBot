@@ -14,6 +14,7 @@ public class CommandContainer {
         commandMap = Collections.unmodifiableMap(new ConcurrentHashMap<>(){{
             put(StartCommand.NAME, new StartCommand(service));
             put(HelpCommand.NAME, new HelpCommand(service));
+            put(StopDialogCommand.NAME, new StopDialogCommand(service));
         }});
 
         unknownCommand = new UnknownCommand(service);

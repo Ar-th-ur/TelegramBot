@@ -20,6 +20,7 @@ public class CallbackContainer {
             put(FortnitStoreCallBack.NAME, new FortnitStoreCallBack(service));
             put(StoreSetsCallback.NAME, new StoreSetsCallback(service));
             put(VbacksCallback.NAME, new VbacksCallback(service));
+            put(StartDialogCallback.NAME, new StartDialogCallback(service));
         }});
     }
 

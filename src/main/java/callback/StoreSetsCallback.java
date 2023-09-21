@@ -42,10 +42,10 @@ public class StoreSetsCallback implements Callback {
 
     private void sendProduct(CallbackQuery callbackQuery) {
         String name = callbackQuery.getData().split(" ", 2)[1];
-        Product setProduct = ProductsContainer.getSet(name);
+        Product set = ProductsContainer.getSet(name);
         Long chatId = callbackQuery.getMessage().getChatId();
         Integer messageId = callbackQuery.getMessage().getMessageId();
-        String paymentLink = service.getInvoiceLink(chatId, setProduct.getName(), setProduct.getPrice());
+        String paymentLink = service.getInvoiceLink(chatId, set.getName(), set.getName(), set.getPrice());
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
                 List.of(
                         List.of(
@@ -56,8 +56,7 @@ public class StoreSetsCallback implements Callback {
                         )
                 )
         );
-        InputMediaPhoto media = setProduct.getPhoto();
-        service.sendEditPhoto(chatId, messageId, media, markup);
+        service.sendEditPhoto(chatId, messageId, set.getPhoto(), markup);
     }
 
     private void sendTitle(CallbackQuery callbackQuery) {

@@ -1,5 +1,6 @@
 package service;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -11,5 +12,7 @@ public interface SendBotService {
 
     void sendEditPhoto(Long chatId, Integer messageId, InputMediaPhoto media, InlineKeyboardMarkup markup);
 
-    String getInvoiceLink(Long chatId, String title, int price);
+    String getInvoiceLink(Long chatId, String title, String payload, int price);
+
+    void send(SendMessage sendMessage);
 }

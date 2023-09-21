@@ -10,7 +10,12 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.payments.LabeledPrice;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.List;
 
 public class SendBotServiceImp implements SendBotService {
     private final TelegramLongPollingBot executor;
@@ -56,13 +61,13 @@ public class SendBotServiceImp implements SendBotService {
     }
 
     @Override
-    public String getInvoiceLink(Long chatId, String title, int price) {
+    public String getInvoiceLink(Long chatId, String title, String payload, int price) {
         CreateInvoiceLink sendInvoice = CreateInvoiceLink.builder()
                 .currency("RUB")
                 .providerToken("410694247:TEST:8fbddfa7-6c7f-43f2-8ed1-63af9094d320")
                 .title("Набор «" + title + "»")
                 .description("Товар для игры Fornite на ваш аккаунт")
-                .payload("payload")
+                .payload(payload)
                 .price(new LabeledPrice("Цена", price))
                 .build();
         try {
@@ -71,5 +76,14 @@ public class SendBotServiceImp implements SendBotService {
             e.printStackTrace();
         }
         return "";
+    }
+
+    @Override
+    public void send(SendMessage sendMessage) {
+        try {
+            executor.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 }
