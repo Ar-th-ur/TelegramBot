@@ -15,4 +15,10 @@ public interface SendBotService {
     String getInvoiceLink(Long chatId, String title, String payload, int price);
 
     void send(SendMessage sendMessage);
+
+    void deleteMessage(Long chatId, Integer messageId);
+
+    void sendMessage(Long chatId, String message, InlineKeyboardMarkup markup);
+
+    void sendEditMessage(Long chatId, Integer messageId, String message);
 }

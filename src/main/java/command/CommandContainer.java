@@ -1,5 +1,9 @@
 package command;
 
+import callback.AccountCallback;
+import callback.FAQCallback;
+import callback.FortnitStoreCallBack;
+import callback.GuaranteeCallback;
 import service.SendBotServiceImp;
 
 import java.util.Collections;
@@ -11,12 +15,11 @@ public class CommandContainer {
     private final UnknownCommand unknownCommand;
 
     public CommandContainer(SendBotServiceImp service) {
-        commandMap = Collections.unmodifiableMap(new ConcurrentHashMap<>(){{
+        commandMap = Collections.unmodifiableMap(new ConcurrentHashMap<>() {{
             put(StartCommand.NAME, new StartCommand(service));
-            put(HelpCommand.NAME, new HelpCommand(service));
+            put("/menu", new StartCommand(service));
             put(StopDialogCommand.NAME, new StopDialogCommand(service));
         }});
-
         unknownCommand = new UnknownCommand(service);
     }
 

@@ -1,5 +1,6 @@
 package callback;
 
+import command.Command;
 import service.SendBotServiceImp;
 
 import java.util.Collections;
@@ -17,6 +18,10 @@ public class CallbackContainer {
             put(PurchasesHistoryCallback.NAME, new PurchasesHistoryCallback(service));
             put(SubscribesCallback.NAME, new SubscribesCallback(service));
             put(SupportCallback.NAME, new SupportCallback(service));
+            put(RefuseReviewCallback.NAME, new RefuseReviewCallback(service));
+            put(SendReviewCallback.NAME, new SendReviewCallback(service));
+            put(AskQuestionCallback.NAME, new AskQuestionCallback(service));
+            put(BackAndRemoveIdCallback.NAME , new BackAndRemoveIdCallback(service));
             put(BackToMainCallback.NAME, new BackToMainCallback(service));
             put(FortnitStoreCallBack.NAME, new FortnitStoreCallBack(service));
             put(FAQCallback.NAME, new FAQCallback(service));
@@ -32,6 +37,6 @@ public class CallbackContainer {
                 return entry.getValue();
             }
         }
-        return callbackQuery -> System.out.println("error");
+        return (update) -> System.out.println("error");
     }
 }
